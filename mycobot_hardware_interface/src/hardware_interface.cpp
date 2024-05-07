@@ -1,7 +1,8 @@
 #include "mycobot_hardware_interface/hardware_interface.hpp"
-
 #include <chrono>
 #include <hardware_interface/types/hardware_interface_type_values.hpp>
+#include <rclcpp_lifecycle/node_interfaces/lifecycle_node_interface.hpp>
+#include <rclcpp_lifecycle/state.hpp>
 #include <range/v3/all.hpp>
 #include <rclcpp/rclcpp.hpp>
 #include <thread>
@@ -34,7 +35,7 @@ MyCobotHardwareInterface::export_command_interfaces() {
   return interfaces;
 }
 
-CallbackReturn MyCobotHardwareInterface::on_init(
+rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn  MyCobotHardwareInterface::on_init(
     const hardware_interface::HardwareInfo& info) {
   if (hardware_interface::SystemInterface::on_init(info) !=
       CallbackReturn::SUCCESS) {
@@ -47,65 +48,65 @@ CallbackReturn MyCobotHardwareInterface::on_init(
     RCLCPP_ERROR(LOGGER, fmt::format("make_serial_connection_to_robot {}",
                                      serial_port.error())
                              .c_str());
-    return CallbackReturn::ERROR;
+    return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn ::ERROR;
   }
 
   mycobot_ = std::make_unique<mycobot::MyCobot>(std::move(serial_port.value()));
-  return CallbackReturn::SUCCESS;
+  return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn ::SUCCESS;
 }
 
-CallbackReturn MyCobotHardwareInterface::on_configure(
+rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn  MyCobotHardwareInterface::on_configure(
     rclcpp_lifecycle::State const& /*previous_state*/) {
   {
     auto const result = mycobot_->send(power_on());
     if (!result) {
       RCLCPP_ERROR(LOGGER, fmt::format("power_on {}", result.error()).c_str());
-      return CallbackReturn::ERROR;
+      return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn ::ERROR;
     }
   }
   {
     auto const result = mycobot_->send(set_color(255, 0, 0));
     if (!result) {
       RCLCPP_ERROR(LOGGER, fmt::format("set_color {}", result.error()).c_str());
-      return CallbackReturn::ERROR;
+      return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn ::ERROR;
     }
   }
 
-  return CallbackReturn::SUCCESS;
+  return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn ::SUCCESS;
 }
 
-CallbackReturn MyCobotHardwareInterface::on_activate(
+rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn  MyCobotHardwareInterface::on_activate(
     rclcpp_lifecycle::State const& /*previous_state*/) {
   auto const result = mycobot_->send(set_color(0, 255, 0));
   if (!result) {
     RCLCPP_ERROR(LOGGER, fmt::format("set_color {}", result.error()).c_str());
     return CallbackReturn::ERROR;
   }
-  return CallbackReturn::SUCCESS;
+  return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn ::SUCCESS;
 }
 
-CallbackReturn MyCobotHardwareInterface::on_deactivate(
+rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn  MyCobotHardwareInterface::on_deactivate(
     rclcpp_lifecycle::State const& /*previous_state*/) {
   {
     auto const result = mycobot_->send(release_all_servos());
     if (!result) {
       RCLCPP_ERROR(
           LOGGER, fmt::format("release_all_servos {}", result.error()).c_str());
-      return CallbackReturn::ERROR;
+      return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn ::ERROR;
     }
   }
   {
     auto const result = mycobot_->send(set_color(0, 0, 255));
     if (!result) {
       RCLCPP_ERROR(LOGGER, fmt::format("set_color {}", result.error()).c_str());
-      return CallbackReturn::ERROR;
+      return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn ::ERROR;
     }
   }
 
-  return CallbackReturn::SUCCESS;
+  return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn ::SUCCESS;
 }
 
-hardware_interface::return_type MyCobotHardwareInterface::read() {
+hardware_interface::return_type MyCobotHardwareInterface::read(const rclcpp::Time & time, const rclcpp::Duration & period) {
   auto const positions = mycobot_->get_radians();
   if (!positions) {
     RCLCPP_ERROR(LOGGER,
@@ -117,7 +118,7 @@ hardware_interface::return_type MyCobotHardwareInterface::read() {
   return hardware_interface::return_type::OK;
 }
 
-hardware_interface::return_type MyCobotHardwareInterface::write() {
+hardware_interface::return_type MyCobotHardwareInterface::write(const rclcpp::Time & time, const rclcpp::Duration & period) {
   auto const result = mycobot_->send_radians(arm_position_command_, 100);
   if (!result) {
     RCLCPP_ERROR(LOGGER,

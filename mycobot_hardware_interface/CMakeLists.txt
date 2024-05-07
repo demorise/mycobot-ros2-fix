@@ -15,6 +15,7 @@ find_package(pluginlib REQUIRED)
 find_package(range-v3 REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(serial REQUIRED)
+find_package(rclcpp_lifecycle REQUIRED)
 
 add_library(${PROJECT_NAME} SHARED
   src/hardware_interface.cpp
@@ -34,6 +35,7 @@ target_link_libraries(${PROJECT_NAME}
 )
 ament_target_dependencies(${PROJECT_NAME}
   hardware_interface
+  rclcpp_lifecycle
 )
 
 pluginlib_export_plugin_description_file(hardware_interface

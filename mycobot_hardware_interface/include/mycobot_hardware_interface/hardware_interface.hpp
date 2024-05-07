@@ -17,23 +17,21 @@ class MyCobotHardwareInterface : public hardware_interface::SystemInterface {
   RCLCPP_SHARED_PTR_DEFINITIONS(MyCobotHardwareInterface)
 
   // Export interfaces
-  std::vector<hardware_interface::StateInterface> export_state_interfaces()
-      final;
-  std::vector<hardware_interface::CommandInterface> export_command_interfaces()
-      final;
+  std::vector<hardware_interface::StateInterface> export_state_interfaces();
+  std::vector<hardware_interface::CommandInterface> export_command_interfaces();
 
   // livecycle node transitions
-  CallbackReturn on_init(hardware_interface::HardwareInfo const& info) final;
+  CallbackReturn on_init(hardware_interface::HardwareInfo const& info);
   CallbackReturn on_configure(
-      rclcpp_lifecycle::State const& previous_state) final;
+      rclcpp_lifecycle::State const& previous_state);
   CallbackReturn on_activate(
-      rclcpp_lifecycle::State const& previous_state) final;
+      rclcpp_lifecycle::State const& previous_state);
   CallbackReturn on_deactivate(
-      rclcpp_lifecycle::State const& previous_state) final;
+      rclcpp_lifecycle::State const& previous_state);
 
   // hardware read and write
-  hardware_interface::return_type read() final;
-  hardware_interface::return_type write() final;
+  hardware_interface::return_type read(const rclcpp::Time & time, const rclcpp::Duration & period);
+  hardware_interface::return_type write(const rclcpp::Time & time, const rclcpp::Duration & period);
 
  private:
   std::unique_ptr<MyCobot> mycobot_ = nullptr;
