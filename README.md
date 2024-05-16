@@ -1,6 +1,8 @@
 # myCobot on ROS 2
 
 ## Fixes
+
+### Fix Compilation
 During the compilation of the mycobot_hardware_interfaces package I encountered multiple issues. These problems were solved by modifying the includes, adapting the `CMakeLists.txt`, specifying the namespace of `CallbackReturn`, and changing method signatures of `read` and `write`.
 
 **The error message I encountered:**
@@ -55,11 +57,16 @@ gmake: *** [Makefile:146: all] Error 2
 Failed   <<< mycobot_hardware_interface [7.43s, exited with code 2]
 ```
 
+### Fix Port Detection
+In the `./mycobot/src/detect.cpp` a hardcoded Vendor ID, Product ID and serial number was used to detect the correct port. These will probably differ from robot to robot so the correct port was not detected when running the `move_group.launch.py` script. Thus, we followed the ElephantRobotics MyCobot [documentation](https://docs.elephantrobotics.com/docs/gitbook-en/12-ApplicationBaseROS/12.1-ROS1/12.1.4-rivz%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8/myCobot-280.html) and simply set the port to `/dev/ttyUSB0`. This did the trick and allowed us to launch rviz and moveit without problems.
+
 ## Setup
 Note that before you can compile the nodes you have to clone these repositories into your `ros2_ws/src` folder:
 - [catch2_ros](https://github.com/tylerjw/catch2_ros.git)
 - [serial2_ros](https://github.com/tylerjw/serial) use the ros2 branch here!
 - [fp](https://github.com/tylerjw/fp)
+
+If you encounter an error when launching with the `move_group.launch.py` script, try fixing the problem by running `sudo chmod 666 /dev/ttyUSB0`. If you still encounter an error try changing `/dev/ttyUSB0` in `./mycobot/src/detect.cpp` to `/dev/ttyACM0`.
 
 ## Original Readme
 [![CI](https://github.com/tylerjw/mycobot/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/tylerjw/mycobot/actions/workflows/ci.yaml?query=branch%3Amain)
