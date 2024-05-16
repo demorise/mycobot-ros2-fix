@@ -137,7 +137,7 @@ def generate_launch_description():
 
     robot_description_content = Command(
         [
-            PathJoinSubstitution([FindExecutable(name="xacro")]),
+            'xacro',
             " ",
             PathJoinSubstitution(
                 [FindPackageShare(description_package), "urdf", description_file]
@@ -162,6 +162,7 @@ def generate_launch_description():
             prefix,
         ], on_stderr="warn"
     )
+    print(str(robot_description_content))
     robot_description = {"robot_description": robot_description_content}
 
     robot_controllers = PathJoinSubstitution(
@@ -255,17 +256,7 @@ def generate_launch_description():
             robot_description_semantic,
             ompl_planning_pipeline_config,
             robot_description_kinematics,
-        ],
-    )
-
-    control_node = Node(
-        package="controller_manager",
-        executable="ros2_control_node",
-        parameters=[robot_description, robot_controllers],
-        output={
-            "stdout": "screen",
-            "stderr": "screen",
-        },
+        ]
     )
 
     robot_state_publisher_node = Node(
@@ -273,6 +264,18 @@ def generate_launch_description():
         executable="robot_state_publisher",
         output="both",
         parameters=[robot_description],
+        remappings=[('/robot_description', '/controller_manager/robot_description')]
+    )
+
+    control_node = Node(
+        package="controller_manager",
+        executable="ros2_control_node",
+        parameters=[robot_controllers],
+        output={
+            "stdout": "screen",
+            "stderr": "screen",
+        },
+        # remappings=[('/controller_manager/robot_description', '/robot_description')]
     )
 
     joint_state_broadcaster_spawner = Node(
@@ -300,6 +303,7 @@ def generate_launch_description():
     )
 
     # Start the actual move_group node/action server
+
     move_group_node = Node(
         package="moveit_ros_move_group",
         executable="move_group",
@@ -316,8 +320,8 @@ def generate_launch_description():
     )
 
     nodes_to_start = [
-        control_node,
         robot_state_publisher_node,
+        control_node,
         joint_state_broadcaster_spawner,
         delay_rviz_after_joint_state_broadcaster_spawner,
         robot_traj_controller_spawner,
