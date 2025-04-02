@@ -21,7 +21,7 @@ std::vector<std::string> get_ports() {
 std::optional<std::string> get_port_of_robot() {
   auto const ports = []() {
     std::vector<std::string> ret;
-    ret.push_back("/dev/ttyUSB0");
+    ret.push_back("/dev/ttyACM0");
     return ret;
   }();
 
