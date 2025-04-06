@@ -6,6 +6,7 @@ Panels:
       Expanded:
         - /Global Options1
         - /RobotModel1/Description Topic1
+        - /MotionPlanning1
       Splitter Ratio: 0.5
     Tree Height: 380
   - Class: rviz_common/Selection
@@ -277,6 +278,19 @@ Visualization Manager:
         Show Robot Visual: true
       Value: true
       Velocity_Scaling_Factor: 0.1
+    - Class: rviz_default_plugins/Marker
+      Enabled: true
+      Name: Marker
+      Namespaces:
+        {}
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /target_pose
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
