@@ -87,14 +87,14 @@ rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn  MyCob
 
 rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn  MyCobotHardwareInterface::on_deactivate(
     rclcpp_lifecycle::State const& /*previous_state*/) {
-  {
-    auto const result = mycobot_->send(release_all_servos());
-    if (!result) {
-      RCLCPP_ERROR(
-          LOGGER, fmt::format("release_all_servos {}", result.error()).c_str());
-      return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn ::ERROR;
-    }
-  }
+  // {
+  //   auto const result = mycobot_->send(release_all_servos());
+  //   if (!result) {
+  //     RCLCPP_ERROR(
+  //         LOGGER, fmt::format("release_all_servos {}", result.error()).c_str());
+  //     return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn ::ERROR;
+  //   }
+  // }
   {
     auto const result = mycobot_->send(set_color(0, 0, 255));
     if (!result) {
