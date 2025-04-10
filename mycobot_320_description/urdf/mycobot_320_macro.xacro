@@ -211,6 +211,25 @@
       <dynamics damping="0" friction="0"/>
     </joint>
 
+
+
+    <link name="${prefix}gripper_link"/>
+    <joint name="${prefix}gripper" type="revolute">
+      <parent link="${prefix}link6" />
+      <child link="${prefix}gripper_link" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <axis xyz="0 0 1" />
+      <limit lower="-3.14" upper="3.14"
+             effort="${joint6_effort_limit}" velocity="${joint6_velocity_limit}"/>
+      <dynamics damping="0" friction="0"/>
+    </joint>
+
+
+
+
+
+
+
     <!-- ROS-Industrial 'tool0' frame - all-zeros tool frame -->
     <link name="${prefix}tool0"/>
     <joint name="${prefix}link6-tool0" type="fixed">

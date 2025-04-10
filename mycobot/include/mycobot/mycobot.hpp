@@ -48,7 +48,7 @@ class MyCobot {
    *
    * @return     The radians.
    */
-  fp::Result<std::array<double, 6>> get_radians();
+  fp::Result<std::array<double, 7>> get_radians();
 
   /**
    * @brief      Send a joint command with radian values
@@ -58,7 +58,7 @@ class MyCobot {
    *
    * @return     Error if command failed, otherwise empty response
    */
-  fp::Result<response_t> send_radians(std::array<double, 6> const& radians,
+  fp::Result<response_t> send_radians(std::array<double, 7> const& radians,
                                       int8_t speed);
 };
 
