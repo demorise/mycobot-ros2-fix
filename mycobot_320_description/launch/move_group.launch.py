@@ -160,6 +160,9 @@ def generate_launch_description():
             " ",
             "prefix:=",
             prefix,
+            " ",
+            "use_fake_hardware:=",
+            use_fake_hardware,
         ], on_stderr="warn"
     )
     print(str(robot_description_content))
