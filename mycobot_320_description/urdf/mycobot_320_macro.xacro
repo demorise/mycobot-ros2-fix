@@ -220,5 +220,13 @@
       <child link="${prefix}tool0"/>
     </joint>
 
+    <!-- Camera frame -->
+    <link name="${prefix}camera"/>
+    <joint name="${prefix}link6-camera" type="fixed">
+      <origin xyz="0 0 0.075" rpy="0 0 0"/>
+      <parent link="${prefix}link6"/>
+      <child link="${prefix}camera"/>
+    </joint>
+
   </xacro:macro>
 </robot>
