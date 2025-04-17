@@ -220,6 +220,14 @@
       <child link="${prefix}tool0"/>
     </joint>
 
+    <!-- Gripper -->
+    <link name="${prefix}gripper"/>
+    <joint name="${prefix}link6-gripper" type="fixed">
+      <origin xyz="0 0 0.025" rpy="0 0 0"/>
+      <parent link="${prefix}link6"/>
+      <child link="${prefix}gripper"/>
+    </joint>
+
     <!-- Camera frame -->
     <link name="${prefix}camera"/>
     <joint name="${prefix}link6-camera" type="fixed">
@@ -227,6 +235,18 @@
       <parent link="${prefix}link6"/>
       <child link="${prefix}camera"/>
     </joint>
+
+
+    <!-- Aruco -->
+<!--     <link name="${prefix}aruco"/>
+    <joint name="${prefix}base-aruco" type="fixed">
+      <origin xyz="-0.035 -0.214 0.353" rpy="${radians(-106.984)} ${radians(-23.960)} ${radians(-172.926)}"/>
+      <parent link="${prefix}base_link"/>
+      <child link="${prefix}aruco"/>
+    </joint> -->
+
+
+
 
   </xacro:macro>
 </robot>
