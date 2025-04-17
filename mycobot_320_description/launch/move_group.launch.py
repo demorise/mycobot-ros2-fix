@@ -324,6 +324,18 @@ def generate_launch_description():
         ],
     )
 
+
+    camera_node = Node(
+        package="usb_cam",
+        executable="usb_cam_node_exe",
+        output="screen",
+    )
+    aruco_node = Node(
+        package="drive_crusher_pkg",
+        executable="aruco_node",
+        output="screen",
+    )
+
     nodes_to_start = [
         robot_state_publisher_node,
         control_node,
@@ -331,6 +343,8 @@ def generate_launch_description():
         delay_rviz_after_joint_state_broadcaster_spawner,
         robot_traj_controller_spawner,
         move_group_node,
+        camera_node,
+        aruco_node,
     ]
 
     return LaunchDescription(declared_arguments + nodes_to_start)
