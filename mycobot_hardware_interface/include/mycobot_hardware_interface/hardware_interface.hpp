@@ -36,10 +36,10 @@ class MyCobotHardwareInterface : public hardware_interface::SystemInterface {
  private:
   std::unique_ptr<MyCobot> mycobot_ = nullptr;
 
-  std::array<std::string, 6> joint_names_ = {"joint1", "joint2", "joint3",
-                                             "joint4", "joint5", "joint6"};
-  std::array<double, 6> arm_position_state_ = {0, 0, 0, 0, 0, 0};
-  std::array<double, 6> arm_position_command_ = {0, 0, 0, 0, 0, 0};
+  std::array<std::string, 7> joint_names_ = {"joint1", "joint2", "joint3",
+                                             "joint4", "joint5", "joint6", "gripper_controller"};
+  std::array<double, 7> arm_position_state_ = {0, 0, 0, 0, 0, 0, 0};
+  std::array<double, 7> arm_position_command_ = {0, 0, 0, 0, 0, 0, 0};
 };
 
 }  // namespace mycobot

@@ -78,24 +78,25 @@ fp::Result<response_t> MyCobot::send(Command const& command) {
   return {};
 }
 
-fp::Result<std::array<double, 6>> MyCobot::get_radians() {
+fp::Result<std::array<double, 7>> MyCobot::get_radians() {
   auto const raw_angles = send(get_angles());
   if (!raw_angles) {
     return tl::make_unexpected(raw_angles.error());
   }
-
-  return std::array<double, 6>{
+  double gripper_val = 0.0;// [TO DO] : get from serial
+  return std::array<double, 7>{
       int2angle(raw_angles->at(0)) * M_PI / 180.0,
       int2angle(raw_angles->at(1)) * M_PI / 180.0,
       int2angle(raw_angles->at(2)) * M_PI / 180.0,
       int2angle(raw_angles->at(3)) * M_PI / 180.0,
       int2angle(raw_angles->at(4)) * M_PI / 180.0,
       int2angle(raw_angles->at(5)) * M_PI / 180.0,
+      gripper_val,
   };
 }
 
 fp::Result<response_t> MyCobot::send_radians(
-    std::array<double, 6> const& radians, int8_t speed) {
+    std::array<double, 7> const& radians, int8_t speed) {
   return send(send_angles(
       std::array<double, 6>{
           radians.at(0) * 180.0 / M_PI,
@@ -106,6 +107,7 @@ fp::Result<response_t> MyCobot::send_radians(
           radians.at(5) * 180.0 / M_PI,
       },
       speed));
+      //send radians.at(6) to gripper
 }
 
 fp::Result<std::unique_ptr<serial::Serial>> make_serial_connection_to_robot() {
