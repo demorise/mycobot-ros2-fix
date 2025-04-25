@@ -115,6 +115,7 @@ hardware_interface::return_type MyCobotHardwareInterface::read(const rclcpp::Tim
   }
 
   arm_position_state_ = positions.value();
+  arm_position_state_[6] = arm_position_command_[6]; // [TO DO]: Use actual value read from robot
   return hardware_interface::return_type::OK;
 }
 
@@ -124,6 +125,7 @@ hardware_interface::return_type MyCobotHardwareInterface::write(const rclcpp::Ti
     RCLCPP_ERROR(LOGGER,
                  fmt::format("send_radians {}", result.error()).c_str());
   }
+  arm_position_state_[6] = arm_position_command_[6]; // [TO DO]: Use actual value read from robot
 
   return hardware_interface::return_type::OK;
 }
